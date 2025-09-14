@@ -66,7 +66,6 @@ export default function EmailRuleDetail() {
       ruleName={name}
       foundRule={foundRule}
       emailBody={emailBody}
-      data={data}
     />
   );
 }
