@@ -44,6 +44,7 @@ export async function POST(req: Request) {
     const result = await sendMailAsync(mailOptionsWithBody);
     return NextResponse.json({ success: true, response: result.response });
   } catch (error) {
+    invariant(error instanceof Error, 'Unknown error type');
     return NextResponse.json(
       { success: false, error: error.message || error.toString() },
       { status: 500 }
