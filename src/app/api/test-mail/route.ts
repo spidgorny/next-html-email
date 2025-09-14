@@ -3,6 +3,7 @@ import nodemailer from 'nodemailer';
 import invariant from 'tiny-invariant';
 
 invariant(process.env.SLAWA_PASSWORD, 'process.env.SLAWA_PASSWORD missing');
+invariant(process.env.TEST_MAIL_TO, 'process.env.TEST_MAIL_TO missing');
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -14,7 +15,7 @@ const transporter = nodemailer.createTransport({
 
 const mailOptions = {
   from: 'spidgorny@gmail.com',
-  to: 'marina2stark@gmail.com, spidgorny@gmail.com',
+  to: process.env.TEST_MAIL_TO,
   subject: 'Node.js Email Test',
   text: 'This is a test email from Nodemailer.',
   html: '<p>This is a <b>test</b> email.</p>',
