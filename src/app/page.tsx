@@ -1,68 +1,70 @@
 'use client';
 
+import Link from 'next/link';
 import * as React from 'react';
 import '@/lib/env';
 
-import ArrowLink from '@/components/links/ArrowLink';
-import ButtonLink from '@/components/links/ButtonLink';
-import UnderlineLink from '@/components/links/UnderlineLink';
-import UnstyledLink from '@/components/links/UnstyledLink';
+import useEmail from '@/lib/useEmail';
 
-/**
- * SVGR Support
- * Caveat: No React Props Type.
- *
- * You can override the next-env if the type is important to you
- * @see https://stackoverflow.com/questions/68103844/how-to-override-next-js-svg-module-declaration
- */
-import Logo from '~/svg/Logo.svg';
-
-// !STARTERCONF -> Select !STARTERCONF and CMD + SHIFT + F
-// Before you begin editing, follow all comments with `STARTERCONF`,
-// to customize the default configuration.
+import { UploadForm } from '@/app/upload-form';
 
 export default function HomePage() {
+  const { data, error, isLoading } = useEmail();
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className='layout flex items-center justify-center min-h-screen'>
+        Loading...
+      </div>
+    );
+  }
+
+  // No data or empty array
+  const isEmpty = !data || (Array.isArray(data) && data.length === 0);
+
   return (
     <main>
-      <section className='bg-white'>
-        <div className='layout relative flex min-h-screen flex-col items-center justify-center py-12 text-center'>
-          <Logo className='w-16' />
-          <h1 className='mt-4'>Next.js + Tailwind CSS + TypeScript Starter</h1>
-          <p className='mt-2 text-sm text-gray-800'>
-            A starter for Next.js, Tailwind CSS, and TypeScript with Absolute
-            Import, Seo, Link component, pre-configured with Husky{' '}
-          </p>
-          <p className='mt-2 text-sm text-gray-700'>
-            <ArrowLink href='https://github.com/theodorusclarence/ts-nextjs-tailwind-starter'>
-              See the repository
-            </ArrowLink>
-          </p>
-
-          <ButtonLink className='mt-6' href='/components' variant='light'>
-            See all components
-          </ButtonLink>
-
-          <UnstyledLink
-            href='https://vercel.com/new/git/external?repository-url=https%3A%2F%2Fgithub.com%2Ftheodorusclarence%2Fts-nextjs-tailwind-starter'
-            className='mt-4'
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              width='92'
-              height='32'
-              src='https://vercel.com/button'
-              alt='Deploy with Vercel'
-            />
-          </UnstyledLink>
-
-          <footer className='absolute bottom-2 text-gray-700'>
-            © {new Date().getFullYear()} By{' '}
-            <UnderlineLink href='https://theodorusclarence.com?ref=tsnextstarter'>
-              Theodorus Clarence
-            </UnderlineLink>
-          </footer>
+      <section className='bg-gray-50'>
+        <div className='layout relative flex min-h-screen flex-row items-start justify-between gap-3'>
+          <div className='basis-6/6 shadow rounded bg-white p-3 my-3 me-3'>
+            {isEmpty ? <UploadForm /> : <EmailList emails={data} />}
+            {error && <div className='text-red-500'>Error loading emails.</div>}
+          </div>
         </div>
       </section>
     </main>
+  );
+}
+
+export interface JsonEmail {
+  id: string;
+  name?: string;
+  createdAt?: string;
+  body: object; // Allow additional properties
+}
+function EmailList({ emails }: { emails: JsonEmail[] }) {
+  return (
+    <div>
+      <h2 className='text-lg font-semibold mb-4'>Email Data</h2>
+      <ul className='space-y-2'>
+        {emails.map((email, idx) => (
+          <li key={email.id || idx} className='border p-2 rounded'>
+            <Link
+              href={`/email/${email.id}`}
+              className='text-blue-600 underline block w-full text-left px-2 py-1'
+            >
+              {email.id} - {email.name || '(no name)'}
+            </Link>
+            <div className='text-xs text-gray-500 mt-1'>
+              Created:{' '}
+              {email.createdAt
+                ? new Date(email.createdAt).toLocaleString()
+                : 'N/A'}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }

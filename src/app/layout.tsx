@@ -7,6 +7,8 @@ import '@/styles/colors.css';
 
 import { siteConfig } from '@/constant/config';
 
+import { Providers } from './providers';
+
 // !STARTERCONF Change these default meta
 // !STARTERCONF Look at @/constant/config to change them
 export const metadata: Metadata = {
@@ -56,7 +58,9 @@ export default function RootLayout({
 }) {
   return (
     <html>
-      <body>{children}</body>
+      <body>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
