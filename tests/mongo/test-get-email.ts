@@ -1,6 +1,6 @@
 import { PrismaClient } from '@generated/prisma';
 
-import { runTest } from './bootstrap';
+import { runTest } from '../bootstrap';
 
 const prisma = new PrismaClient();
 

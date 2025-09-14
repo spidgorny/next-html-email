@@ -1,7 +1,8 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import useSWR from 'swr';
+import invariant from 'tiny-invariant';
 
 export function UploadForm() {
   const [file, setFile] = React.useState<File | null>(null);
@@ -67,7 +68,8 @@ export function UploadForm() {
       setSuccess(`Uploaded! New ID: ${res.data.id}`);
       await mutate(); // Refresh email list
       router.push(`/email/${res.data.id}`); // Redirect to page with the new id
-    } catch (err: Error) {
+    } catch (err) {
+      invariant(err instanceof AxiosError);
       setError(err?.response?.data?.error || 'Upload failed.');
     } finally {
       setLoading(false);

@@ -3,10 +3,11 @@
 import axios from 'axios';
 import { useParams } from 'next/navigation';
 import * as React from 'react';
+import invariant from 'tiny-invariant';
+
+import { useEmailById } from '@/lib/useEmail';
 
 import { EmailTemplateConfig } from '@/app/jsonEmail';
-
-import { useEmailById } from '../../page';
 
 export default function EmailRuleDetail() {
   const params = useParams();
@@ -72,7 +73,7 @@ export default function EmailRuleDetail() {
         },
       };
       // Prepare payload: update the rule in the email body
-      const updatedBody = Array.isArray(data.body)
+      const updatedBody = Array.isArray(data?.body)
         ? data.body.map((ruleSet) => ({
             ...ruleSet,
             Rules: Array.isArray(ruleSet.Rules)
@@ -81,7 +82,7 @@ export default function EmailRuleDetail() {
                 )
               : ruleSet.Rules,
           }))
-        : data.body;
+        : data?.body;
       const payload = {
         body: updatedBody,
       };
@@ -90,7 +91,8 @@ export default function EmailRuleDetail() {
         throw new Error('Failed to update email');
       }
       setPostSuccess(true);
-    } catch (err: Error) {
+    } catch (err) {
+      invariant(err instanceof Error);
       setPostError(err.message || 'Unknown error');
     } finally {
       setPostLoading(false);

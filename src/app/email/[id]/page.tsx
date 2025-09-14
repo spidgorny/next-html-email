@@ -2,14 +2,8 @@
 
 import { useParams } from 'next/navigation';
 import * as React from 'react';
-import useSWR from 'swr';
 
-import { JsonEmail } from '@/app/jsonEmail';
-
-export function useEmailById(id: string) {
-  const { data, error, isLoading } = useSWR(id ? `/api/db/json/${id}` : null);
-  return { data: data as JsonEmail | undefined, error, isLoading };
-}
+import { useEmailById } from '@/lib/useEmail';
 
 export default function EmailDetailPage() {
   const params = useParams();
