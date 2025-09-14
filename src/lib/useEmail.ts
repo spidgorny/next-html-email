@@ -1,7 +1,7 @@
 'use client';
 import useSWR from 'swr';
 
-import { EmailTemplateConfig, JsonEmail } from '@/app/jsonEmail';
+import { EmailTemplateConfig, JsonEmail, RuleSet } from '@/app/jsonEmail';
 import * as React from 'react';
 import axios from 'axios';
 import invariant from 'tiny-invariant';
@@ -43,7 +43,7 @@ export function useEmailById(id: string) {
         },
       };
       const updatedBody = Array.isArray(data?.body)
-        ? data.body.map((ruleSet: EmailTemplateConfig) => ({
+        ? data.body.map((ruleSet: RuleSet) => ({
             ...ruleSet,
             Rules: Array.isArray(ruleSet.Rules)
               ? ruleSet.Rules.map((rule: EmailTemplateConfig) =>

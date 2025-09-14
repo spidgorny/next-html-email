@@ -5,7 +5,7 @@ export interface JsonEmail {
   body: RuleSet[]; // Allow additional properties
 }
 
-interface RuleSet {
+export interface RuleSet {
   Enabled: boolean;
   Rules: EmailTemplateConfig[];
 }
