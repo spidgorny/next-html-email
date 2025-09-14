@@ -22,15 +22,18 @@ export default function HomePage() {
   }
 
   // No data or empty array
-  const isEmpty = !data || (Array.isArray(data) && data.length === 0);
+  // const isEmpty = !data || (Array.isArray(data) && data.length === 0);
 
   return (
     <main>
       <section className='bg-gray-50'>
-        <div className='layout relative flex min-h-screen flex-row items-start justify-between gap-3'>
-          <div className='basis-6/6 shadow rounded bg-white p-3 my-3 me-3'>
-            {isEmpty ? <UploadForm /> : <EmailList emails={data} />}
+        <div className='layout relative flex min-h-screen flex-col gap-3 p-3'>
+          <div className='shadow rounded bg-white p-3'>
+            <EmailList emails={data} />
             {error && <div className='text-red-500'>Error loading emails.</div>}
+          </div>
+          <div className='shadow rounded bg-white p-3'>
+            <UploadForm />
           </div>
         </div>
       </section>
