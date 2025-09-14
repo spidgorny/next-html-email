@@ -45,3 +45,6 @@ sitemap-*.xml
 .idea/
 
 /generated/prisma
+
+src/lib/db-config.ts
+modified.json

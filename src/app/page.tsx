@@ -6,6 +6,7 @@ import '@/lib/env';
 
 import useEmail from '@/lib/useEmail';
 
+import { JsonEmail } from '@/app/jsonEmail';
 import { UploadForm } from '@/app/upload-form';
 
 export default function HomePage() {
@@ -37,12 +38,6 @@ export default function HomePage() {
   );
 }
 
-export interface JsonEmail {
-  id: string;
-  name?: string;
-  createdAt?: string;
-  body: object; // Allow additional properties
-}
 function EmailList({ emails }: { emails: JsonEmail[] }) {
   return (
     <div>
