@@ -27,3 +27,29 @@ export async function GET(request: Request) {
     );
   }
 }
+
+export async function POST(request: Request) {
+  // Extract the id from the URL
+  const url = new URL(request.url);
+  const id = url.pathname.split('/').pop();
+
+  if (!id) {
+    return NextResponse.json({ error: 'Missing email id' }, { status: 400 });
+  }
+
+  console.log('asd', id);
+  try {
+    const updatedData = await request.json();
+    // Update the email record in the database
+    const updatedEmail = await prisma.mfilesEmail.update({
+      where: { id },
+      data: updatedData,
+    });
+    return NextResponse.json({ success: true, email: updatedEmail });
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Failed to update email', details: String(error) },
+      { status: 500 }
+    );
+  }
+}
