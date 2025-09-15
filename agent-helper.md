@@ -84,6 +84,7 @@ customCommands:
 
 _Last updated: 2025-09-14_
 
+Use pnpm as package manager.
 Please use axios for all API calls.
 Don't use useSWR directly inside the components, create a separate function for data fetching.
 Always use async/await for handling promises.

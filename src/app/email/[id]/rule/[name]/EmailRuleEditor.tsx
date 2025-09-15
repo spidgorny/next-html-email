@@ -118,8 +118,12 @@ export default function EmailRuleEditor({
             <div className='text-gray-500'>No email body found.</div>
           )}
         </aside>
+
         <main className='basis-3/6 shadow rounded bg-white p-3 my-3 me-3'>
-          <div dangerouslySetInnerHTML={{ __html: bodyText }} />
+          <div
+            className='prose max-w-none'
+            dangerouslySetInnerHTML={{ __html: bodyText }}
+          />
         </main>
       </div>
     </section>

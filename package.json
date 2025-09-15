@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@prisma/client": "^6.16.1",
+    "@tailwindcss/typography": "^0.5.16",
     "axios": "^1.12.2",
     "clsx": "^2.0.0",
     "dotenv": "^17.2.2",
