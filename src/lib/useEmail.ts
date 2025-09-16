@@ -19,7 +19,11 @@ export function useEmailById(id: string) {
   const [postError, setPostError] = React.useState<string | null>(null);
   const [postSuccess, setPostSuccess] = React.useState(false);
 
-  async function handlePost(foundRule: EmailTemplateConfig, bodyText: string) {
+  async function handlePost(
+    foundRule: EmailTemplateConfig,
+    bodyText: string,
+    subject: string
+  ) {
     setPostLoading(true);
     setPostError(null);
     setPostSuccess(false);
@@ -40,6 +44,7 @@ export function useEmailById(id: string) {
             },
             ...foundRule['E-mail'].EmailBody.slice(1),
           ],
+          Subject: subject,
         },
       };
       const updatedBody = Array.isArray(data?.body)

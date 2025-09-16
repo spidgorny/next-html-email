@@ -29,12 +29,18 @@ export default function EmailRuleEditor({
   const [testMailError, setTestMailError] = React.useState<string | null>(null);
   const [testMailSuccess, setTestMailSuccess] = React.useState(false);
 
+  const [subject, setSubject] = React.useState(
+    foundRule['E-mail']?.Subject || ruleName || ''
+  );
+  React.useEffect(() => {
+    setSubject(foundRule['E-mail']?.Subject || ruleName || '');
+  }, [foundRule, ruleName]);
+
   async function handleSendTestMail() {
     setTestMailLoading(true);
     setTestMailError(null);
     setTestMailSuccess(false);
     try {
-      const subject = foundRule['E-mail']?.Subject || ruleName || 'Test Email';
       const html = bodyText;
       const res = await axios.post('/api/test-mail', { subject, html });
       if (res.status !== 200 || !res.data?.success) {
@@ -77,54 +83,73 @@ export default function EmailRuleEditor({
           </button>
           <h1 className='text-xl font-bold'>Rule: {ruleName}</h1>
         </div>
-        <div className='flex items-center mt-2 gap-2'>
-          <button
-            type='button'
-            className='px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed'
-            onClick={() => handlePost(foundRule, bodyText)}
-            disabled={postLoading || !foundRule || !id}
-          >
-            {postLoading ? 'Posting...' : 'Save'}
-          </button>
-          {postSuccess && <span className='text-green-600'>Saved!</span>}
-          {postError && (
-            <span className='text-red-600'>Error: {postError}</span>
-          )}
-          <button
-            type='button'
-            className='px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed'
-            onClick={handleSendTestMail}
-            disabled={testMailLoading}
-          >
-            {testMailLoading ? 'Sending...' : 'Send Test Mail'}
-          </button>
-          {testMailSuccess && (
-            <span className='text-green-600'>Test mail sent!</span>
-          )}
-          {testMailError && (
-            <span className='text-red-600'>Error: {testMailError}</span>
-          )}
+        <div className='flex flex-col gap-2 items-end'>
+          <div className='flex items-center gap-2'>
+            <button
+              type='button'
+              className='px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed'
+              onClick={() => handlePost(foundRule, bodyText, subject)}
+              disabled={postLoading || !foundRule || !id}
+            >
+              {postLoading ? 'Posting...' : 'Save'}
+            </button>
+            {postSuccess && <span className='text-green-600'>Saved!</span>}
+            {postError && (
+              <span className='text-red-600'>Error: {postError}</span>
+            )}
+            <button
+              type='button'
+              className='px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed'
+              onClick={handleSendTestMail}
+              disabled={testMailLoading}
+            >
+              {testMailLoading ? 'Sending...' : 'Send Test Mail'}
+            </button>
+            {testMailSuccess && (
+              <span className='text-green-600'>Test mail sent!</span>
+            )}
+            {testMailError && (
+              <span className='text-red-600'>Error: {testMailError}</span>
+            )}
+          </div>
         </div>
       </div>
+
+      <div className='flex items-center mb-1 gap-2'>
+        <label htmlFor='subject' className='text-sm font-medium min-w-[60px]'>
+          Subject
+        </label>
+        <input
+          id='subject'
+          type='text'
+          className='border rounded px-2 py-1 text-sm flex-1 w-full'
+          value={subject}
+          onChange={(e) => setSubject(e.target.value)}
+          placeholder='Subject'
+        />
+      </div>
+
       <div className='layout relative flex min-h-screen flex-row items-start justify-between gap-3'>
-        <aside className='basis-3/6 min-h-screen py-3 ps-3 flex'>
+        <div className='basis-3/6 min-h-screen py-3 flex rounded bg-white shadow-xl'>
           {foundRule['E-mail']?.EmailBody?.[0]?.Body ? (
             <textarea
-              className='bg-gray-100 p-4 rounded w-full max-w-2xl overflow-x-auto text-xs min-h-[300px]'
+              className='bg-gray-100 p-3 rounded w-full overflow-x-auto text-xs min-h-[300px]'
               value={bodyText}
               onChange={(e) => setBodyText(e.target.value)}
             />
           ) : (
             <div className='text-gray-500'>No email body found.</div>
           )}
-        </aside>
+        </div>
 
-        <main className='basis-3/6 shadow rounded bg-white p-3 my-3 me-3'>
-          <div
-            className='prose max-w-none'
-            dangerouslySetInnerHTML={{ __html: bodyText }}
-          />
-        </main>
+        <div className='basis-3/6 w-full'>
+          <div className='shadow-xl rounded bg-white p-3 my-3'>
+            <div
+              className='prose max-w-none'
+              dangerouslySetInnerHTML={{ __html: bodyText }}
+            />
+          </div>
+        </div>
       </div>
     </section>
   );
