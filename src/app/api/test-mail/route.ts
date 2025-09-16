@@ -2,19 +2,20 @@ import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import invariant from 'tiny-invariant';
 
-invariant(process.env.SLAWA_PASSWORD, 'process.env.SLAWA_PASSWORD missing');
+invariant(process.env.GMAIL_USERNAME, 'process.env.GMAIL_USERNAME missing');
+invariant(process.env.GMAIL_PASSWORD, 'process.env.GMAIL_PASSWORD missing');
 invariant(process.env.TEST_MAIL_TO, 'process.env.TEST_MAIL_TO missing');
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'spidgorny@gmail.com',
-    pass: process.env.SLAWA_PASSWORD,
+    user: process.env.GMAIL_USERNAME,
+    pass: process.env.GMAIL_PASSWORD,
   },
 });
 
 const mailOptions = {
-  from: 'spidgorny@gmail.com',
+  from: process.env.GMAIL_USERNAME,
   to: process.env.TEST_MAIL_TO,
   subject: 'Node.js Email Test',
   text: 'This is a test email from Nodemailer.',
